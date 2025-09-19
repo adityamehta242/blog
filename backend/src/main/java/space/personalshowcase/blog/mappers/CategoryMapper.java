@@ -9,6 +9,7 @@ import org.mapstruct.ReportingPolicy;
 
 import space.personalshowcase.blog.domain.PostStatus;
 import space.personalshowcase.blog.domain.dtos.CategoryDTO;
+import space.personalshowcase.blog.domain.dtos.CreateCategoryRequestDto;
 import space.personalshowcase.blog.domain.entities.Category;
 import space.personalshowcase.blog.domain.entities.Post;
 
@@ -17,6 +18,9 @@ public interface CategoryMapper {
 
 	@Mapping(target = "postCount" , source = "posts" , qualifiedByName = "calculatePostCount")
 	CategoryDTO toDto(Category category);
+	
+
+	Category toEntity(CreateCategoryRequestDto createCategoryRequestDto);
 	
 	@Named("calculatePostCount")
 	default long calculatePostCount(List<Post> posts)
@@ -29,4 +33,7 @@ public interface CategoryMapper {
 			.filter(post -> PostStatus.PUBLISHED.equals(post.getPostStatus()))
 			.count();
 	}
+	
+	
+	
 }
