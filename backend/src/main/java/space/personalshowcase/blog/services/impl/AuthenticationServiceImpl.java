@@ -24,8 +24,8 @@ import space.personalshowcase.blog.services.AuthenticationService;
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService{
 	
-	private AuthenticationManager authenticationManager;
-	private UserDetailsService userDetailsService;
+	private final AuthenticationManager authenticationManager;
+	private final UserDetailsService userDetailsService;
 	
 	@Value("${jwt.secret}")
 	private String secretKey;
