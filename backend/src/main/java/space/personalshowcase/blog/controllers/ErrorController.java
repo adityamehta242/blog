@@ -2,6 +2,7 @@ package space.personalshowcase.blog.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ public class ErrorController {
 		return new  ResponseEntity<>(error , HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<ApiErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex)
 	{
@@ -40,6 +42,7 @@ public class ErrorController {
 		return new  ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
 	}
 	
+	
 	@ExceptionHandler(IllegalStateException.class)
 	public ResponseEntity<ApiErrorResponse> handleIIllegalStateException(IllegalStateException ex)
 	{
@@ -51,6 +54,20 @@ public class ErrorController {
 				.build();
 		
 		return new  ResponseEntity<>(error , HttpStatus.CONFLICT);
+	}
+	
+	
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<ApiErrorResponse> handleBadCredentialsException(BadCredentialsException ex)
+	{
+		log.error("Caught exception " + ex);
+		
+		ApiErrorResponse error = ApiErrorResponse.builder()
+				.status(HttpStatus.UNAUTHORIZED.value())
+				.message("Incorrect email or password")
+				.build();
+		
+		return new  ResponseEntity<>(error , HttpStatus.UNAUTHORIZED);
 	}
 	
 	
