@@ -17,6 +17,7 @@ import space.personalshowcase.blog.repositories.UserRepository;
 import space.personalshowcase.blog.security.BlogUserDetailsService;
 import space.personalshowcase.blog.security.JwtAuthenticationFilter;
 import space.personalshowcase.blog.services.AuthenticationService;
+import space.personalshowcase.blog.domain.entities.User;
 
 @Configuration
 public class SecurityConfig {
@@ -28,7 +29,22 @@ public class SecurityConfig {
 
 	@Bean
 	UserDetailsService userDetailsService(UserRepository userRepository) {
-		return new BlogUserDetailsService(userRepository);
+		BlogUserDetailsService blogUserDetailsService = new BlogUserDetailsService(userRepository);
+		
+		String email = "test@mail.com";
+		
+		userRepository.findByEmail(email).orElseGet(()->{
+			User newUser = User.builder()
+					.email(email)
+					.name("test user")
+					.password(passwordEncoder().encode("pass123"))
+					.build();
+			
+			return userRepository.save(newUser);
+			
+		});
+		
+		return blogUserDetailsService;
 	}
 
 	@Bean
