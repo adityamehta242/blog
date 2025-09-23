@@ -2,12 +2,16 @@ package space.personalshowcase.blog.controllers;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import space.personalshowcase.blog.domain.dtos.CreateTagsRequest;
 import space.personalshowcase.blog.domain.dtos.TagResponseDto;
 import space.personalshowcase.blog.domain.entities.Tag;
 import space.personalshowcase.blog.mappers.TagMapper;
@@ -27,5 +31,13 @@ public class TagController {
 		List<Tag> tags = tagService.getTag();
 		List<TagResponseDto> tagResponse = tags.stream().map(tagMapper::toTagResponseDto).toList();
 		return ResponseEntity.ok(tagResponse);
+	}
+	
+	@PostMapping
+	public ResponseEntity<List<TagResponseDto>> createTags(@RequestBody CreateTagsRequest createTagsRequest)
+	{
+		List<Tag> saveTags = tagService.createTags(createTagsRequest.getName());
+		List<TagResponseDto> createTagResponse = saveTags.stream().map(tagMapper::toTagResponseDto).toList();
+		return new ResponseEntity<List<TagResponseDto>>(createTagResponse , HttpStatus.CREATED);
 	}
 }
