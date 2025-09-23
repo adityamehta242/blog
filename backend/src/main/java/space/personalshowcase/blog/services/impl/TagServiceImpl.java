@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -49,6 +50,20 @@ public class TagServiceImpl implements TagService{
 		
 		saveTag.addAll(existingTags);
 		return saveTag;
+	}
+
+	@Transactional
+	@Override
+	public void deleteTag(UUID id) {
+		
+		tagRepository.findById(id).ifPresent(tag -> {
+			if (!tag.getPosts().isEmpty()) {
+				throw new IllegalStateException("Tag is already use in the Post");
+			}
+			
+			tagRepository.deleteById(id);
+		});
+		
 	}
 
 }
