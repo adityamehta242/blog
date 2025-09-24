@@ -11,6 +11,7 @@ import space.personalshowcase.blog.domain.PostStatus;
 import space.personalshowcase.blog.domain.entities.Category;
 import space.personalshowcase.blog.domain.entities.Post;
 import space.personalshowcase.blog.domain.entities.Tag;
+import space.personalshowcase.blog.domain.entities.User;
 import space.personalshowcase.blog.repositories.PostRepository;
 import space.personalshowcase.blog.services.CategoryService;
 import space.personalshowcase.blog.services.PostService;
@@ -48,6 +49,13 @@ public class PostServiceImpl implements PostService{
 		}
 		
 		return postRepository.findAllByPostStatus(PostStatus.PUBLISHED);
+	}
+
+
+	@Override
+	public List<Post> getAllDraftPosts(User user) {
+		
+		return postRepository.findAllByAuthorAndPostStatus(PostStatus.DRAFT, user);
 	}
 
 }
