@@ -9,7 +9,7 @@ import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 import space.personalshowcase.blog.domain.PostStatus;
-import space.personalshowcase.blog.domain.dtos.TagResponseDto;
+import space.personalshowcase.blog.domain.dtos.TagDto;
 import space.personalshowcase.blog.domain.entities.Post;
 import space.personalshowcase.blog.domain.entities.Tag;
 
@@ -17,7 +17,7 @@ import space.personalshowcase.blog.domain.entities.Tag;
 public interface TagMapper {
 
     @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
-    TagResponseDto toTagResponseDto(Tag tag);
+    TagDto toTagResponseDto(Tag tag);
 
     @Named("calculatePostCount")
     default Integer calculatePostCount(Set<Post> posts) {

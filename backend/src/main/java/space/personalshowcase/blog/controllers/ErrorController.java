@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import space.personalshowcase.blog.domain.dtos.ApiErrorResponse;
 
@@ -71,4 +72,16 @@ public class ErrorController {
 	}
 	
 	
+	@ExceptionHandler(EntityNotFoundException.class)
+	public ResponseEntity<ApiErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex)
+	{
+		log.error("Caught exception " + ex);
+		
+		ApiErrorResponse error = ApiErrorResponse.builder()
+				.status(HttpStatus.NOT_FOUND.value())
+				.message(ex.getMessage())
+				.build();
+		
+		return new  ResponseEntity<>(error , HttpStatus.NOT_FOUND);
+	}
 }     

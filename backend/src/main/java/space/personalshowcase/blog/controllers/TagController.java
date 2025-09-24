@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import space.personalshowcase.blog.domain.dtos.CreateTagsRequest;
-import space.personalshowcase.blog.domain.dtos.TagResponseDto;
+import space.personalshowcase.blog.domain.dtos.TagDto;
 import space.personalshowcase.blog.domain.entities.Tag;
 import space.personalshowcase.blog.mappers.TagMapper;
 import space.personalshowcase.blog.services.TagService;
@@ -29,19 +29,19 @@ public class TagController {
 	private final TagMapper tagMapper;
 	
 	@GetMapping
-	public ResponseEntity<List<TagResponseDto>> getAllTags()
+	public ResponseEntity<List<TagDto>> getAllTags()
 	{
 		List<Tag> tags = tagService.getTag();
-		List<TagResponseDto> tagResponse = tags.stream().map(tagMapper::toTagResponseDto).toList();
+		List<TagDto> tagResponse = tags.stream().map(tagMapper::toTagResponseDto).toList();
 		return ResponseEntity.ok(tagResponse);
 	}
 	
 	@PostMapping
-	public ResponseEntity<List<TagResponseDto>> createTags(@RequestBody CreateTagsRequest createTagsRequest)
+	public ResponseEntity<List<TagDto>> createTags(@RequestBody CreateTagsRequest createTagsRequest)
 	{
 		List<Tag> saveTags = tagService.createTags(createTagsRequest.getName());
-		List<TagResponseDto> createTagResponse = saveTags.stream().map(tagMapper::toTagResponseDto).toList();
-		return new ResponseEntity<List<TagResponseDto>>(createTagResponse , HttpStatus.CREATED);
+		List<TagDto> createTagResponse = saveTags.stream().map(tagMapper::toTagResponseDto).toList();
+		return new ResponseEntity<List<TagDto>>(createTagResponse , HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{id}")
