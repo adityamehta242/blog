@@ -32,22 +32,22 @@ public class PostServiceImpl implements PostService{
 			Category category = categoryService.getCategoryById(categoryId);
 			Tag tag = tagService.getTagById(tagId);
 			
-			return postRepository.findAllByStatusAndCategoryAndTagsContaining(PostStatus.PUBLISHED, category, tag);
+			return postRepository.findAllByPostStatusAndCategoryAndTagsContaining(PostStatus.PUBLISHED, category, tag);
 		}
 		
 		
 		if(categoryId != null) {
 			Category category = categoryService.getCategoryById(categoryId);
-			return postRepository.findAllByStatusAndCategory(PostStatus.PUBLISHED, category);
+			return postRepository.findAllByPostStatusAndCategory(PostStatus.PUBLISHED, category);
 		}
 		
 		
 		if(tagId != null) {
 			Tag tag = tagService.getTagById(tagId);
-			return postRepository.findAllByStatusAndTags(PostStatus.PUBLISHED , tag);
+			return postRepository.findAllByPostStatusAndTags(PostStatus.PUBLISHED , tag);
 		}
 		
-		return postRepository.findAllByStatus(PostStatus.PUBLISHED);
+		return postRepository.findAllByPostStatus(PostStatus.PUBLISHED);
 	}
 
 }
