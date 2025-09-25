@@ -45,7 +45,7 @@ public class Post {
 	private String title;
 	
 	@Column(nullable = false , columnDefinition = "TEXT")
-	private String context;
+	private String content;
 	
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -80,7 +80,7 @@ public class Post {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(context, createdAt, id, postStatus, readingTime, title, updatedAt);
+		return Objects.hash(content, createdAt, id, postStatus, readingTime, title, updatedAt);
 	}
 
 
@@ -94,7 +94,7 @@ public class Post {
 		if (getClass() != obj.getClass())
 			return false;
 		Post other = (Post) obj;
-		return Objects.equals(context, other.context) && Objects.equals(createdAt, other.createdAt)
+		return Objects.equals(content, other.content) && Objects.equals(createdAt, other.createdAt)
 				&& Objects.equals(id, other.id) && postStatus == other.postStatus
 				&& Objects.equals(readingTime, other.readingTime) && Objects.equals(title, other.title)
 				&& Objects.equals(updatedAt, other.updatedAt);
