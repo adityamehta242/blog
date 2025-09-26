@@ -4,13 +4,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import space.personalshowcase.blog.domain.CreatePostRequest;
 import space.personalshowcase.blog.domain.PostStatus;
+import space.personalshowcase.blog.domain.UpdatePostRequest;
 import space.personalshowcase.blog.domain.entities.Category;
 import space.personalshowcase.blog.domain.entities.Post;
 import space.personalshowcase.blog.domain.entities.Tag;
@@ -23,6 +26,7 @@ import space.personalshowcase.blog.services.TagService;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService{
+
 	
 	private final PostRepository postRepository;
 	private final CategoryService categoryService;
@@ -98,5 +102,38 @@ public class PostServiceImpl implements PostService{
 		return (int) Math.ceil((double) wordCount / WORDS_PER_MINUTE);
 		
 	}
+
+
+	@Transactional
+	@Override
+	public Post updatePost(UUID id, UpdatePostRequest updatePostRequest) {
+		
+		Post existingPost =  postRepository.findById(id)
+				.orElseThrow(()-> new EntityNotFoundException("Post not found with this Id " + id));
+		
+		
+		existingPost.setTitle(updatePostRequest.getTitle());
+		existingPost.setContent(updatePostRequest.getContent());
+		existingPost.setPostStatus(updatePostRequest.getPostStatus());
+		existingPost.setReadingTime(calculateReadingTime(updatePostRequest.getContent()));
+		
+		UUID updatePostRequestategoryId =  updatePostRequest.getCategoryId();
+		if (!existingPost.getCategory().getId().equals(updatePostRequestategoryId)) {
+			Category newCategory =  categoryService.getCategoryById(updatePostRequestategoryId);
+			existingPost.setCategory(newCategory);
+		}
+		
+		Set<UUID> existingTagIds =  existingPost.getTags().stream().map(Tag::getId).collect(Collectors.toSet());
+		Set<UUID> updatePostRequestIds = updatePostRequest.getTagsIds();
+		
+		if (!existingTagIds.equals(updatePostRequestIds)) {
+			List<Tag> newTags =  tagService.getTagByIds(updatePostRequestIds);
+			existingPost.setTags(new HashSet<>(newTags));
+		}
+		
+		return postRepository.save(existingPost);
+	}
+	
+	
 
 }
