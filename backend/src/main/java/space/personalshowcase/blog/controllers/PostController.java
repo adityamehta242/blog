@@ -80,5 +80,13 @@ public class PostController {
 		PostDto updatedPostDto = postMapper.toDto(updatedPost);
 		return new ResponseEntity<PostDto>(updatedPostDto , HttpStatus.OK);
 	}
+	
+	@GetMapping(path = "/{id}")
+	public ResponseEntity<PostDto> getPost(@PathVariable UUID id)
+	{
+		Post post = postService.getPost(id);
+		return ResponseEntity.ok(postMapper.toDto(post));
+		 
+	}
 
 }
