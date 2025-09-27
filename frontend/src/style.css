@@ -1,0 +1,19 @@
+* {
+  padding: 0%;
+  margin: 0%;
+  box-sizing: border-box;
+  background-color: #44444E;
+  color: white;
+}
+
+.container {
+  max-width: 825px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 15px;
+}
+
+p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
